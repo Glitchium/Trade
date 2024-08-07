@@ -1,27 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Send Data to Discord Webhook</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Prevents scrolling */
+        }
+
+        .background-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://tr.rbxcdn.com/7762f33ee079e5f17cc456e40def9b1c/768/432/Image/Webp') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(10px);
+            z-index: -1;
+        }
+
+        .content-container {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .textbox {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .send-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .send-button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <button id="sendDataButton">Send Data</button>
+    <div class="background-container"></div>
+    <div class="content-container">
+        <input type="text" class="textbox" id="textBox" placeholder="Enter your message here">
+        <button class="send-button" id="sendDataButton">Send Data</button>
+    </div>
 
     <script>
         // Replace with your Discord webhook URL
         const webhookUrl = 'https://discord.com/api/webhooks/1270543198145613985/E2z3NwmVhpO8bdKGwyx974HjJHAB69U3Nm09j8-V0QTwImOrTyJr22t8gb6Qfp4FT71l';
 
         document.getElementById('sendDataButton').addEventListener('click', function() {
-            // Data to send to the Discord webhook
+            const message = document.getElementById('textBox').value;
+            if (message.trim() === '') {
+                alert('Please enter a message.');
+                return;
+            }
+
             const data = {
-                content: 'Hello from the website!',
+                content: message,
                 embeds: [{
-                    title: 'Embed Title',
-                    description: 'This is an embed description',
+                    title: 'User Message',
+                    description: message,
                     color: 5814783
                 }]
             };
 
-            // Send data to the Discord webhook
             fetch(webhookUrl, {
                 method: 'POST',
                 headers: {
@@ -32,9 +104,12 @@
             .then(response => response.json())
             .then(result => {
                 console.log('Success:', result);
+                document.getElementById('textBox').value = ''; // Clear the textbox
+                alert('Message sent successfully!');
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert('Failed to send message.');
             });
         });
     </script>
