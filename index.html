@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send Data to Discord Webhook</title>
+</head>
+<body>
+    <button id="sendDataButton">Send Data</button>
+
+    <script>
+        // Replace with your Discord webhook URL
+        const webhookUrl = 'YOUR_DISCORD_WEBHOOK_URL';
+
+        document.getElementById('sendDataButton').addEventListener('click', function() {
+            // Data to send to the Discord webhook
+            const data = {
+                content: 'Hello from the website!',
+                embeds: [{
+                    title: 'Embed Title',
+                    description: 'This is an embed description',
+                    color: 5814783
+                }]
+            };
+
+            // Send data to the Discord webhook
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Success:', result);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
